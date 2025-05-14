@@ -20,7 +20,7 @@ EOF
         git commit -m "admin1 updated inventory"
         git push origin main
         if ansible all -m ping | grep -q $ip|awk '{print $3}'; then
-         echo "Successful"
+         echo "\n\n\n\nSuccessful"
         else
          echo "Failed"
            fi
