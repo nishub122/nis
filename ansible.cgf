@@ -1,0 +1,4 @@
+Paste in the following 
+[defaults]
+inventory = inventory
+private_key_file = ~/.ssh/ansible
