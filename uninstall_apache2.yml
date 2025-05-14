@@ -3,9 +3,21 @@
   become: true
   tasks:
 
-    - name: Install Apache2 and PHP packages
+    - name: UnInstall Apache2 and PHP packages on Ubuntu
       apt:
-        name:
+        name: 
           - apache2
           - libapache2-mod-php
         state: absent
+      when: ansible_distribution == "Ubuntu"
+
+    - name: UnInstall httpd and PHP packages on AlmaLinux
+      dnf:
+        name: 
+          - httpd
+          - php
+        state: absent
+      when: ansible_distribution == "AlmaLinux"
+
+
+    

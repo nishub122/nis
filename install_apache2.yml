@@ -2,14 +2,54 @@
 - hosts: all
   become: true
   tasks:
-    - name: Update repository index
+
+    - name: Update apt cache on Ubuntu
       apt:
         update_cache: yes
+      when: ansible_distribution == "Ubuntu"
 
-    - name: Install Apache2 and PHP packages
+    - name: Install Apache2 and PHP packages on Ubuntu
       apt:
-        name:
+        name: 
           - apache2
           - libapache2-mod-php
         state: latest
+      when: ansible_distribution == "Ubuntu"
 
+    - name: Update dnf cache on AlmaLinux
+      dnf:
+        update_cache: yes
+      when: ansible_distribution == "AlmaLinux"
+
+    - name: Install httpd and PHP packages on AlmaLinux
+      dnf:
+        name: 
+          - httpd
+          - php
+        state: latest
+      when: ansible_distribution == "AlmaLinux"
+
+    - name: Enable and start Apache on AlmaLinux
+      systemd:
+        name: httpd
+        state: started
+        enabled: yes
+      when: ansible_distribution == "AlmaLinux"
+
+
+    - name: Restart Apache on AlmaLinux after configuration
+      systemd:
+        name: httpd
+        state: restarted
+      when: ansible_distribution == "AlmaLinux"
+
+    - name: Open HTTP port in firewall on AlmaLinux
+      firewalld:
+        port: 80/tcp
+        permanent: yes
+        state: enabled
+      when: ansible_distribution == "AlmaLinux"
+
+    - name: Reload firewall on AlmaLinux
+      command: firewall-cmd --reload
+      when: ansible_distribution == "AlmaLinux"
